@@ -12,8 +12,9 @@ namespace DBAtsiskaitymas.Functions
     {
         public static void PrintStudentWithCourses(Context dbContext)
         {
-            Console.Write("Enter student ID : ");
+            Awailable(dbContext);                        
             int id = int.Parse(Console.ReadLine());
+            Menu.DrawMenu();
             var student = dbContext.Students.Include("Courses").Where(x => x.Id == id).FirstOrDefault();
             if (student != null)
             {
@@ -52,25 +53,36 @@ namespace DBAtsiskaitymas.Functions
         }
         public static void ChangeDepartment(Context dbContext)
         {
-            Console.Write("Enter students ID : ");
+            Awailable(dbContext);            
             int studentId = int.Parse(Console.ReadLine());
-            Console.Write("Enter department ID : ");
+            Menu.DrawMenu();
+            DepartmentsFunctions.Awailable(dbContext);
             int departmentId = int.Parse(Console.ReadLine());
+            Menu.DrawMenu();
             var student = dbContext.Students.Where(x => x.Id == studentId).First();
             student.DepartmentId = departmentId;
-            AddCourses(student, dbContext);
             student.Courses.Clear();
+            AddCourses(student, dbContext);            
             dbContext.SaveChanges();
+        }
+        public static void AddCoursesForStudent(Context dbContext)
+        {
+            Awailable(dbContext);
+            int id = int.Parse(Console.ReadLine());
+            var student = dbContext.Students.Where(x => x.Id == id).First();
+            AddCourses(student, dbContext);
         }
         public static void AddCourses(Student student, Context dbContext)
         {
-            Console.WriteLine("Enter students course ID's separated by space : ");
+            CoursesFunctions.Awailable(student.DepartmentId, dbContext);
+            Console.Write("(You can enter more departmens separating ID's by space) : ");
             string courses = Console.ReadLine();
             List<int> coursesId = courses.Split(' ').Select(n => Convert.ToInt32(n)).ToList();
             foreach (int courseId in coursesId)
             {
                 student.Courses.Add(dbContext.Courses.Where(x => x.Id == courseId).First());
             }
+            Console.WriteLine("Course/Courses added.");
         }
         public static void Awailable(Context dbContext)
         {

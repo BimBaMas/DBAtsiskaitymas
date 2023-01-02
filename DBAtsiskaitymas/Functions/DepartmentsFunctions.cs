@@ -108,6 +108,7 @@ namespace DBAtsiskaitymas.Functions
             var course = dbContext.Courses.Where(x => x.Id == courseId).First();
             department.Courses.Add(course);
             dbContext.SaveChanges();
+            Console.WriteLine("Course added.");
         }
         public static void Awailable(Context dbContext)
         {

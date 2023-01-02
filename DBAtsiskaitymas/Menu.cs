@@ -13,14 +13,12 @@ namespace DBAtsiskaitymas
         {
             string menu = "";
             while (true)
-            {
-                Console.Clear();
+            {                
                 DrawMenu();                
                 menu = Console.ReadKey().KeyChar.ToString();
                 Console.CursorLeft = 0;
                 Console.Write(" ");
-                DrawSubMenu(menu, dbContext);
-                Console.ReadKey();
+                DrawSubMenu(menu, dbContext);                
             }
         }
         public static void SetCursor(int left)
@@ -42,21 +40,26 @@ namespace DBAtsiskaitymas
                     SetCursor(4); Console.WriteLine("| [6]Add course to department  |"); 
                     Console.ResetColor();
                     subMenu = Console.ReadKey().KeyChar.ToString();
-                    SelectFunction(menu+subMenu, dbContext);
+                    if (!subMenu.Equals("/u001b"))
+                        SelectFunction(menu + subMenu, dbContext);                    
                     break;
                 case "2":
                     SetCursor(23); Console.WriteLine("| [1]Create new course |");
+                    SetCursor(23); Console.WriteLine("| [2]Delete course     |");
                     Console.ResetColor();
                     subMenu = Console.ReadKey().KeyChar.ToString();
-                    SelectFunction(menu + subMenu, dbContext);
+                    if (!subMenu.Equals("/u001b"))
+                        SelectFunction(menu + subMenu, dbContext);                    
                     break;
                 case "3":
                     SetCursor(42); Console.WriteLine("| [1]Student courses            |");
                     SetCursor(42); Console.WriteLine("| [2]Create new student         |");
                     SetCursor(42); Console.WriteLine("| [3]Change students department |");
+                    SetCursor(42); Console.WriteLine("| [4]Add courses for student    |");
                     Console.ResetColor();
                     subMenu = Console.ReadKey().KeyChar.ToString();
-                    SelectFunction(menu + subMenu, dbContext);
+                    if (!subMenu.Equals("/u001b"))
+                        SelectFunction(menu + subMenu, dbContext);
                     break;
                 case "Q":
                     Console.ResetColor();
@@ -79,33 +82,51 @@ namespace DBAtsiskaitymas
             {
                 case "11" :
                     DepartmentsFunctions.PrintDepartmentWithStudents(dbContext);
+                    Console.ReadKey();
                     break;
                 case "12":
                     DepartmentsFunctions.PrintDepartmentWithCourses(dbContext);
+                    Console.ReadKey();
                     break;
                 case "13":
                     DepartmentsFunctions.AddDepartment(dbContext);
+                    Console.ReadKey();
                     break;
                 case "14":
                     DepartmentsFunctions.DeleteDepartment(dbContext);
+                    Console.ReadKey();
                     break;
                 case "15":
                     DepartmentsFunctions.AddStudent(dbContext);
+                    Console.ReadKey();
                     break;
                 case "16":
                     DepartmentsFunctions.AddCourse(dbContext);
+                    Console.ReadKey();
                     break;
                 case "21":
                     CoursesFunctions.CreateNewCourseAndAddToDepartment(dbContext);
+                    Console.ReadKey();
+                    break;
+                case "22":
+                    CoursesFunctions.DeleteCourse(dbContext);
+                    Console.ReadKey();
                     break;
                 case "31":
                     StudentsFunctions.PrintStudentWithCourses(dbContext);
+                    Console.ReadKey();
                     break;
                 case "32":
                     StudentsFunctions.CreateStudent(dbContext);
+                    Console.ReadKey();
                     break;
                 case "33":
                     StudentsFunctions.ChangeDepartment(dbContext);
+                    Console.ReadKey();
+                    break;
+                case "34":
+                    StudentsFunctions.AddCoursesForStudent(dbContext);
+                    Console.ReadKey();
                     break;
                 default:
                     break;
