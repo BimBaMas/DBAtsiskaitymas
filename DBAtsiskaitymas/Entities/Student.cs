@@ -28,5 +28,12 @@ namespace DBAtsiskaitymas.Entities
             Surname = surname;
             Courses = new List<Course>();
         }
+        public Student(string name, string surname, int departmentId)
+        {
+            Name = name;
+            Surname = surname;
+            Courses = new List<Course>();
+            DepartmentId = departmentId;
+        }
     }
 }

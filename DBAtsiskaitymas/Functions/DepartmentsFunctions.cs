@@ -31,6 +31,11 @@ namespace DBAtsiskaitymas.Functions
             int id = int.Parse(Console.ReadLine());
             var department = dbContext.Departments.Include("Courses").Where(x => x.Id == id).First();
             Console.WriteLine($"Department ID : {department.Id} Department : {department.Name}");
+            PrintDepartmentCourses(department);
+        }
+
+        public static void PrintDepartmentCourses(Department department)
+        {
             Console.WriteLine("Department courses : ");
             foreach (var course in department.Courses)
             {
@@ -84,15 +89,10 @@ namespace DBAtsiskaitymas.Functions
 
         public static void PrintDepartments(Context dbContext)
         {
-            var departments = dbContext.Departments.Include("Courses").Select(x => x);
+            var departments = dbContext.Departments;
             foreach (var department in departments)
             {
-                Console.WriteLine($"Department ID : {department.Id} Department : {department.Name}");
-                Console.WriteLine("Department courses : ");
-                foreach (var course in department.Courses)
-                {
-                    Console.WriteLine($"{course.Id} {course.Name}");
-                }
+                Console.WriteLine($"Department ID : {department.Id} Department : {department.Name}");                
             }
         }                
     }
