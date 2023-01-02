@@ -15,6 +15,8 @@ namespace DBAtsiskaitymas.Functions
     {
         public static void PrintDepartmentWithStudents(Context dbContext)
         {
+            Console.WriteLine("Awailable departments : ");
+            PrintDepartments(dbContext);
             Console.Write("Enter department ID : ");
             int id = int.Parse(Console.ReadLine());
             var department = dbContext.Departments.Include("Students").Where(x => x.Id == id).First();
@@ -92,7 +94,7 @@ namespace DBAtsiskaitymas.Functions
             var departments = dbContext.Departments;
             foreach (var department in departments)
             {
-                Console.WriteLine($"Department ID : {department.Id} Department : {department.Name}");                
+                Console.WriteLine($"[{department.Id}]{department.Name}");
             }
         }                
     }

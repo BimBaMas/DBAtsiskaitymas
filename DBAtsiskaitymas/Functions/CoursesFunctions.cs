@@ -29,7 +29,7 @@ namespace DBAtsiskaitymas.Functions
             var courses = dbContext.Courses;
             foreach (var course in courses)
             {
-                Console.WriteLine($"ID {course.Id} Name {course.Name}");
+                Console.WriteLine($"[{course.Id}]{course.Name}");
             }
         }
     }

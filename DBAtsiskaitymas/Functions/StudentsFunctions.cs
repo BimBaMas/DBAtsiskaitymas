@@ -14,17 +14,31 @@ namespace DBAtsiskaitymas.Functions
         {
             Console.Write("Enter student ID : ");
             int id = int.Parse(Console.ReadLine());
-            var student = dbContext.Students.Include("Courses").Where(x => x.Id == id).First();
-            Console.WriteLine($"Student ID : {student.Id} Name, surname : {student.Name} {student.Surname}");
-            Console.WriteLine("Student courses : ");
-            foreach (var course in student.Courses)
+            var student = dbContext.Students.Include("Courses").Where(x => x.Id == id).FirstOrDefault();
+            if (student != null)
             {
-                Console.WriteLine($"{course.Id} {course.Name}");
+                Console.WriteLine($"Student ID : {student.Id} Name, surname : {student.Name} {student.Surname}");
+                if (student.Courses.Count > 0)
+                {
+                    Console.WriteLine("Student courses : ");
+                    foreach (var course in student.Courses)
+                    {
+                        Console.WriteLine($"{course.Id} {course.Name}");
+                    }
+                }
+                else 
+                {
+                    Console.WriteLine("This student does not have any courses.");
+                }
             }
+            else
+            {
+                Console.WriteLine("Student does not exist!");            }
+
         }
 
         public static void CreateStudent(Context dbContext)
-        { 
+        {
             Console.Write("Enter students name : ");
             string name = Console.ReadLine();
             Console.Write("Enter students surname : ");
@@ -37,13 +51,13 @@ namespace DBAtsiskaitymas.Functions
             dbContext.SaveChanges();
         }
         public static void ChangeDepartment(Context dbContext)
-        { 
+        {
             Console.Write("Enter students ID : ");
             int studentId = int.Parse(Console.ReadLine());
             Console.Write("Enter department ID : ");
             int departmentId = int.Parse(Console.ReadLine());
             var student = dbContext.Students.Where(x => x.Id == studentId).First();
-            student.DepartmentId = departmentId;            
+            student.DepartmentId = departmentId;
             AddCourses(student, dbContext);
             student.Courses.Clear();
             dbContext.SaveChanges();
@@ -59,10 +73,10 @@ namespace DBAtsiskaitymas.Functions
             }
         }
         public static void PrintStudents(Context dbContext)
-        { 
+        {
             var students = dbContext.Students;
             foreach (var student in students)
-                Console.WriteLine($"{student.Id} {student.Name} {student.Surname}");
+                Console.WriteLine($"[{student.Id}]{student.Name} {student.Surname}");
         }
     }
 }
