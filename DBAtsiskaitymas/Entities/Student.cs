@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DB_Atsiskaitymas.Entities
+namespace DBAtsiskaitymas.Entities
 {
     public class Student
     {
