@@ -114,6 +114,7 @@ namespace DBAtsiskaitymas
         // /u001b
         public static void DrawMenu()
         {
+            Console.Clear();
             SetColor();
             Console.Write("| [1]Departments |");
             Console.ResetColor(); Console.Write(" "); SetColor();

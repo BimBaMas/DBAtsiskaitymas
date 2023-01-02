@@ -24,6 +24,12 @@ namespace DBAtsiskaitymas.Functions
             dbContext.Courses.Add(course);
             dbContext.SaveChanges();
         }
+        public static void Awailable(Context dbContext)
+        {
+            Console.WriteLine("Awailable courses : ");
+            PrintCourses(dbContext);
+            Console.Write("Enter course ID : ");
+        }
         public static void PrintCourses(Context dbContext)
         {
             var courses = dbContext.Courses;

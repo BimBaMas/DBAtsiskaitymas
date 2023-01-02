@@ -72,6 +72,12 @@ namespace DBAtsiskaitymas.Functions
                 student.Courses.Add(dbContext.Courses.Where(x => x.Id == courseId).First());
             }
         }
+        public static void Awailable(Context dbContext)
+        {
+            Console.WriteLine("Awailable students : ");
+            PrintStudents(dbContext);
+            Console.Write("Enter student ID : ");
+        }
         public static void PrintStudents(Context dbContext)
         {
             var students = dbContext.Students;

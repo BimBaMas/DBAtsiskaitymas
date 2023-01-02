@@ -15,35 +15,47 @@ namespace DBAtsiskaitymas.Functions
     {
         public static void PrintDepartmentWithStudents(Context dbContext)
         {
-            Console.WriteLine("Awailable departments : ");
-            PrintDepartments(dbContext);
-            Console.Write("Enter department ID : ");
+            Awailable(dbContext);
             int id = int.Parse(Console.ReadLine());
+            Menu.DrawMenu();
             var department = dbContext.Departments.Include("Students").Where(x => x.Id == id).First();
-            Console.WriteLine($"Department ID : {department.Id} Department : {department.Name}");
-                Console.WriteLine("Department students : ");
+            Console.WriteLine($"[{department.Id}] {department.Name} students : ");
+            if (department.Students.Count > 0)
+            {
                 foreach (var student in department.Students)
                 {
                     Console.WriteLine($"{student.Id} {student.Name} {student.Surname}");
-                }            
+                }
+            }
+            else
+            {
+                Console.WriteLine("Department does not have any students.");
+            }
         }
         public static void PrintDepartmentWithCourses(Context dbContext)
         {
-            Console.Write("Enter department ID : ");
+            Awailable(dbContext);
             int id = int.Parse(Console.ReadLine());
+            Menu.DrawMenu();
             var department = dbContext.Departments.Include("Courses").Where(x => x.Id == id).First();
-            Console.WriteLine($"Department ID : {department.Id} Department : {department.Name}");
+            Console.WriteLine($"[{department.Id}] {department.Name} courses : ");
             PrintDepartmentCourses(department);
         }
 
         public static void PrintDepartmentCourses(Department department)
         {
-            Console.WriteLine("Department courses : ");
-            foreach (var course in department.Courses)
+            if (department.Courses.Count > 0)
             {
-                Console.WriteLine($"{course.Id} {course.Name}");
+                foreach (var course in department.Courses)
+                {
+                    Console.WriteLine($"{course.Id} {course.Name}");
+                }
             }
-        }
+            else
+            {
+                Console.WriteLine("Department does not have any courses.");
+            }
+        }        
         public static void AddDepartment(Context dbContext)
         {
             Console.Write("Enter name for new department : ");
@@ -52,43 +64,57 @@ namespace DBAtsiskaitymas.Functions
             {
                 dbContext.Departments.Add(new Department(name));
                 dbContext.SaveChanges();
+                Console.WriteLine("Department added.");
             }
         }
         public static void DeleteDepartment(Context dbContext)
         {
-            Console.WriteLine("Enter department ID which you want to delete : ");
+            Awailable(dbContext);
+            Console.Write("Enter department ID which you want to delete : ");
             int id = int.Parse(Console.ReadLine());
+            Menu.DrawMenu();
             var department = dbContext.Departments.Include("Students").Where(x => x.Id == id).First();
             var students = department.Students;
             dbContext.Students.RemoveRange(students);
             dbContext.Departments.Remove(department);
             dbContext.SaveChanges();
-        }
+            Console.WriteLine("Department deleted.");
+        }        
         public static void AddStudent(Context dbContext)
         {
-            Console.Write("Enter student ID : ");
+            StudentsFunctions.Awailable(dbContext);            
             int studentId = int.Parse(Console.ReadLine());
-            Console.Write("Enter department ID : ");
+            Menu.DrawMenu();
+            Awailable(dbContext);            
             int departmentId = int.Parse(Console.ReadLine());
+            Menu.DrawMenu();
             var department = dbContext.Departments.Include("Students").Where(x => x.Id == departmentId).First();
-            var student = dbContext.Students.Where(x => x.Id == studentId).First();
+            var student = dbContext.Students.Include("Courses").Where(x => x.Id == studentId).First();
             student.DepartmentId = departmentId;
             student.Courses.Clear();
             department.Students.Add(student);
             dbContext.SaveChanges();
-        }
+            Console.WriteLine("Student added/moved to department.");
+        }        
         public static void AddCourse(Context dbContext)
         {
-            Console.Write("Enter course ID : ");
-            int courseId = int.Parse(Console.ReadLine());
-            Console.Write("Enter department ID : ");
+            Awailable(dbContext);
             int departmentId = int.Parse(Console.ReadLine());
+            Menu.DrawMenu();
+            CoursesFunctions.Awailable(dbContext);            
+            int courseId = int.Parse(Console.ReadLine());
+            Menu.DrawMenu();
             var department = dbContext.Departments.Include("Courses").Where(x => x.Id == departmentId).First();
-            var course = dbContext.Courses.Where(x => x.Id == courseId).First();            
+            var course = dbContext.Courses.Where(x => x.Id == courseId).First();
             department.Courses.Add(course);
             dbContext.SaveChanges();
         }
-
+        public static void Awailable(Context dbContext)
+        {
+            Console.WriteLine("Awailable departments : ");
+            PrintDepartments(dbContext);
+            Console.Write("Enter department ID : ");
+        }
         public static void PrintDepartments(Context dbContext)
         {
             var departments = dbContext.Departments;
@@ -96,6 +122,6 @@ namespace DBAtsiskaitymas.Functions
             {
                 Console.WriteLine($"[{department.Id}]{department.Name}");
             }
-        }                
+        }
     }
 }
